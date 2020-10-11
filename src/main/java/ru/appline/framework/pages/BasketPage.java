@@ -18,16 +18,20 @@ public class BasketPage extends BasePage{
     @FindBy(xpath = "//div[text()='Удалить']")
     WebElement confirmDeletion;
 
+    @FindBy(xpath = "//a[@href=\"/cart\"]/span[contains(@class,'f-caption--bold')]")
+    WebElement countBasket;
+
     @FindBy(xpath = "//h1")
     WebElement header;
 
-    private void checkAmountItems(String n) {
+    private void checkAmountItems() {
+        String count = countBasket.getText();
         String[] arr = amount.getText().split(" ");
-        Assert.assertEquals("Количество товаров в корзине не соответствует", n, arr[0]);
+        Assert.assertEquals("Количество товаров в корзине не соответствует", count, arr[0]);
     }
 
     public void cleanBasket() {
-        checkAmountItems("8");
+        checkAmountItems();
         if (!tickSelectAll.isSelected()) clicker(tickSelectAll);
         clicker(deleteSelected);
         clicker(confirmDeletion);

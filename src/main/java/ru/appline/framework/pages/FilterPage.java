@@ -2,12 +2,14 @@ package ru.appline.framework.pages;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import ru.appline.framework.managers.DriverManager;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.concurrent.TimeUnit;
 
 public class FilterPage extends BasePage{
 
@@ -62,35 +64,40 @@ public class FilterPage extends BasePage{
                 return;
             }
         }
+    }
 
-
-        WebElement viewAll = null;
+    public void searchAndSetFilterTick(String filterTitle, String value) {
+        WebElement thisFilter = filter(filterTitle);
+        if(thisFilter.findElement(By.xpath("./div[2]")).getAttribute("style").equals("display: none;")) {
+            clicker(thisFilter);
+        }
+        WebElement viewAll;
         WebElement searchTick;
+        WebElement link;
         try {
+            DriverManager.getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
             wait.withTimeout(Duration.ofSeconds(1));
             viewAll = thisFilter.findElement(By.xpath(".//span[contains(.,'Посмотреть все')]"));
             clicker(viewAll);
         } catch (NoSuchElementException e) {
         }
         finally {
+            DriverManager.getDriver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
             wait.withTimeout(Duration.ofSeconds(20));
-            searchTick = thisFilter.findElement(By.xpath(".//p[text()='Найти']/../input"));
-            fillField(searchTick, value);
-            List<WebElement> findTicks = thisFilter.findElements(By.xpath(".//a"));
-            for (WebElement e: findTicks) {
-                link = e.findElement(By.xpath(".//div[2]/span"));
-                if (link.getText().contains(value)){
-                    if(!link.isSelected()) clicker(link);
-                    waitLoadPage();
-                    sleeper(1000);
-                    return;
-                }
+        }
+        searchTick = thisFilter.findElement(By.xpath("./div[contains(@class, 'filter-block')]/div/div/input"));
+        fillField(searchTick, value);
+        List<WebElement> findTicks = thisFilter.findElements(By.xpath(".//a"));
+        for (WebElement e: findTicks) {
+            link = e.findElement(By.xpath(".//div[2]/span"));
+            if (link.getText().contains(value)){
+                if(!link.isSelected()) clicker(link);
+                waitLoadPage();
+                sleeper(1000);
+                return;
             }
         }
     }
-
-
-
     public void apply() {
         clicker(applyButton);
         sleeper(1000);

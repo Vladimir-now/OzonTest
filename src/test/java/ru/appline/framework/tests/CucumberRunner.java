@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         glue = {"ru.appline.framework.tests.steps"},
         features = {"src/test/resources/"},
-        tags = "@iphone"
+        tags = "@smoke"
 )
 
 public class CucumberRunner {

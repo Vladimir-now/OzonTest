@@ -3,13 +3,17 @@ package ru.appline.framework.tests.steps;
 import io.cucumber.java.ru.Когда;
 import io.qameta.allure.Allure;
 import ru.appline.framework.managers.PageManager;
+import ru.appline.framework.managers.PropertiesManager;
 
 import java.io.IOException;
 
+import static ru.appline.framework.managers.DriverManager.getDriver;
 import static ru.appline.framework.utils.Log.getBytesAnnotationWithArgs;
+import static ru.appline.framework.utils.PropConst.APP_URL;
 
 public class Steps {
     private PageManager app = PageManager.getPageManager();
+    public static PropertiesManager properties = PropertiesManager.getTestPropManager();
 
     @Когда("^Загружена стартовая страница$")
     public void getInitialPage(){
@@ -39,6 +43,11 @@ public class Steps {
     @Когда("^Устанавливаем в фильтре '(.*)' галочку возле '(.*)'$")
     public void setCheckboxTick(String filterTitle, String value) {
         app.getFilterPage().setFilterTick(filterTitle, value);
+    }
+
+    @Когда("^Ищем и устанавливаем в фильтре '(.*)' галочку возле '(.*)'$")
+    public void searchAndSetFilterTick(String filterTitle, String value) {
+        app.getFilterPage().searchAndSetFilterTick(filterTitle, value);
     }
 
     @Когда("^Применяем выбранные фильтры$")

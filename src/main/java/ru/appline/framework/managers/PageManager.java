@@ -5,10 +5,14 @@ import com.sun.org.apache.regexp.internal.RE;
 import ru.appline.framework.pages.*;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static ru.appline.framework.managers.DriverManager.getDriver;
+import static ru.appline.framework.utils.PropConst.APP_URL;
 
 public class PageManager {
 
-    private ArrayList<BasePage> pages = new ArrayList<>();
+    private List<BasePage> pages = new ArrayList<>();
 
     private static PageManager pageManager;
 
@@ -64,8 +68,8 @@ public class PageManager {
     }
 
     public void deletePages() {
-        for (BasePage p: pages) {
-            pages.remove(this);
+        for (int i = 0; i < pages.size(); i++) {
+            pages.remove(i);
         }
     }
 }
